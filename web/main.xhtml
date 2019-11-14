@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view>
+    <h:head>
+    <h:outputStylesheet library="css" name="main.css"/>
+    <h:outputScript library="js" name="main.js"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Лабочка</title>
+</h:head>
+    <h:body>
+        <header align="center">
+            <h1>
+                Проверка попадания точки в заданную область
+            </h1>
+            Медведева Елизавета Игоревна  P3200
+            <br/>Вариант - 271615
+        </header>
+
+                <div id="leftSide" align="center">
+                    <h:form id="canvaForm" onsubmit="return false">
+                        <h:inputHidden id="canvaX" value="#{Bean.enterX}" />
+                        <h:inputHidden id="canvaY" value="#{Bean.enterY}" />
+                        <h:inputHidden id="canvaR" value="#{Bean.enterR}" />
+                        <canvas id="plot" width="300" height="300">
+                            Canvas not supported
+                        </canvas>
+                    <table><tr><td>
+                        <h:outputText id="canvaInfo" value="Радиус не выбран" style="margin: 10px"/>
+                        <p:slider id="canvaslider" align="center" maxValue="4" minValue="1" step="0.25" for="canvaR"  style="width: 150px; height: 10px;"
+                                  display="canvaInfo" displayTemplate="Выбран радиус: {value}" />
+
+                    </td>
+                    </tr>
+                    </table>
+                        <p:remoteCommand name="canvaReady"  action="#{Bean.addToList}" update=":resultss"/>
+                    </h:form>
+
+                </div>
+                <div id="form">
+                    <h:form id="formm" class="data-form" prependId="false" onsubmit="return false" >
+
+                        <table cellpadding="10" id="tableform">
+                            <tr>
+                                <th>X:</th>
+                                <td>
+                                    <h:inputHidden id="x" value="#{Bean.enterX}"/>
+                                    <h:commandLink id="x-5" class="linc" value="-5" onclick="return false" />
+                                    <h:commandLink id="x-4" class="linc" value="-4" onclick="return false" />
+                                    <h:commandLink id="x-3" class="linc" value="-3" onclick="return false" />
+                                    <h:commandLink id="x-2" class="linc" value="-2" onclick="return false" />
+                                    <h:commandLink id="x-1" class="linc" value="-1" onclick="return false" />
+                                    <h:commandLink id="x0" class="linc" value="0" onclick="return false" />
+                                    <h:commandLink id="x1" class="linc" value="1" onclick="return false" />
+                                    <h:commandLink id="x2" class="linc" value="2" onclick="return false"  />
+                                    <h:commandLink id="x3" class="linc" value="3" onclick="return false" />
+                                    <br/>
+                                    <span id="warningX"  style="color:red; font-size: 90%"> </span>
+                                </td>
+                            </tr>
+                        <tr>
+                                <th> Y:</th>
+                                <td style="height: 30px">
+                                    <h:inputText value = "#{Bean.enterYForm}"  id="enterY" name="enterY" title="y" maxlength="15">
+                                        <f:validateDoubleRange minimum="-3" maximum="5"/>
+                                    </h:inputText>
+                                    <br/>
+                                    <h:message for="enterY" id="warningY"  style="color:red; font-size: 90%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            <th>R: </th>
+                            <td id="r">
+                                <h:inputHidden id="formR" value="#{Bean.enterR}"/>
+                                <h:outputText id="sldInfo" value="Радиус не выбран"/>
+                                <p:slider id="slider" maxValue="4" minValue="1" step="0.25" for="formR" style="width: 150px; height: 10px; left: 40px; margin: 5px"
+                                          display="sldInfo" displayTemplate="Выбран радиус: {value}" />
+
+                            </td>
+                            </tr>
+                            <tr align="center">
+
+                                <td align="center" colspan="2"><p:commandButton id="check"  value="Отправить" type="button"/>
+
+                                    <p:remoteCommand name="ok" action="#{Bean.addToList}" update=":resultss"/>
+
+                                </td>
+
+
+
+                            </tr>
+                        </table>
+                    </h:form>
+                </div>
+
+                <p:commandButton value="Вернуться к началу" action="toIndex"/>
+
+            <h:dataTable value="#{Bean.getHitsList()}" var="point"
+                         styleClass="order-table"
+                         headerClass="order-table-header"
+                         rowClasses="order-table-odd-row,order-table-even-row"
+                         id="resultss">
+
+                <h:column>
+                    <f:facet class="" name="header">
+                     <h5>X</h5>
+                </f:facet>
+                    #{point.x}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h5>Y</h5>
+                    </f:facet>
+                    #{point.y}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                       <h5> R</h5>
+                    </f:facet>
+                    #{point.r}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                     <h5>  Попадание</h5>
+                </f:facet>
+                    #{point.inArea}
+                </h:column>
+
+            </h:dataTable>
+
+    </h:body>
+</f:view>
+        </html>
